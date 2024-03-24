@@ -1,0 +1,87 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=7">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'portal/navbar_styles.css' %}">
+  <title>Sociovate - Dashboard</title>
+  <link rel="stylesheet" href="{% static 'portal/dashboard_styles.css' %}">
+  <link
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="{% static 'portal/images/favicon.png' %}">
+    <script src="https://kit.fontawesome.com/66aa7c98b3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="{% static 'portal/images/favicon.png' %}">
+
+</head>
+<body>
+    {% include 'portal/includes/navbar.html' %}
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="width: 80%; display: flex; align-items: center; justify-content:center; text-align:center; padding: 10px 10px 10px 10px; margin: 15px 15px 0px 10%; border: 1px solid black; border-radius: 10px">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if not in_team %}
+    <h2 class="dashboard-title">Dashboard</h2>
+    <p class="user-info">{{ user.username }}</p>
+    <div class="button-container">
+        <div class="button-wrapper">
+            <a href="{% url 'create_team_view' %}"><button class="button create-team-button">Create a Team</button></a>
+        </div>
+        <div class="button-wrapper">
+            <a href="{% url 'join_team_view' %}"><button class="button join-team-button">Join a Team</button></a>
+        </div>
+    </div>
+    {% else %}
+        
+    <h1>{{ team.team_name }}</h1>
+    <div class="container">
+        <div class="box">
+            <span class="username"><b>Username:</b></span>
+            <span class="team-members"><b>Team Members</b></span>
+            <span class="team-count">{{ count }}</span>
+            <span class="username-right">{{user.username}}</span>
+            <div class="rectangle-group">
+            <div class="rectangle-row">
+                {% for member in members %}
+                <div class="rectangle">{{ member.username }}</div>
+                {% endfor %}
+            </div>
+            <div class="rectangle-row">
+            </div>
+            </div>
+            <a href="{% url 'leave_team_view' %}"><button class="submit-button">Leave</button></a>
+        </div>  
+
+        <div class="box">
+                <svg width="68" height="64" viewBox="0 0 76 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="38" cy="37.5" r="37.5" fill="#FFAD2F"/>
+                <rect x="13" y="34" width="50.625" height="7.5" rx="3" fill="white"/>
+                </svg>
+                
+            <div class="submission-details">
+            <p class="submission-text">Submission Deadline</p>
+            <p class="submission-date">25th March 2024</p>
+            <p class="submission-status">Status: {% if submissions.title %}Submitted{% else %}Pending{% endif %}</p>
+            </div>
+            {% if submissions %}
+                <a href="{% url 'submission_view' %}"><button class="submit-button">Edit</button></a>
+            {% else %}
+                <a href="{% url 'submission_view' %}"><button class="submit-button">Submit</button></a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    <script src="{% static 'portal/scripts/script.js' %}"></script>
+</body>
+</html>
